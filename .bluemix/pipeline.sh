@@ -351,7 +351,10 @@ do
     sleep 10s
     echo curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' --basic --user ${USERID}:${PASSWORD} ${API_HOST}/api/v1/networks/${NETWORKID}/nodes/status
     STATUS=$(curl -X GET --header 'Content-Type: application/json' --header 'Accept: application/json' --basic --user ${USERID}:${PASSWORD} ${API_HOST}/api/v1/networks/${NETWORKID}/nodes/status)
-    PEER_STATUS=$(echo ${STATUS} | jq --raw-output ".[\"${PEER}\"].status")
+    ## Sachin's update of if condition
+    if [[ ${STATUS} != *"500"* ]] && [[ ${STATUS} != *"Error"* ]] && [[ ${STATUS} != *"400"* ]]; then
+        PEER_STATUS=$(echo ${STATUS} | jq --raw-output ".[\"${PEER}\"].status")
+    fi
     i=$[$i+1]
 done
 
